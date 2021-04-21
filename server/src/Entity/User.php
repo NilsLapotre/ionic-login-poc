@@ -4,13 +4,14 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use DateTimeInterface;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
+use App\Controller\UserForgetPasswordAction;
+use App\Controller\UserUpdatePasswordAction;
+
 
 /**
  * @ApiResource(
@@ -20,7 +21,25 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *      },
  *      "post"={
  *          "denormalization_context"={"groups"="user:write:post"}
- *      }
+ *      },
+ *      "post_forget_password"={
+ *              "method"="POST",
+ *              "path"="/users/forget-password",
+ *              "controller"=UserForgetPasswordAction::class,
+ *              "swagger_context"={
+ *                  "summary"="Reset a User password.",
+ *              },
+ *              "denormalization_context"={"groups"={"user:forget-password"}}
+ *          },
+ *     "post_update_password"={
+ *              "method"="POST",
+ *              "path"="/users/update-password",
+ *              "controller"=UserUpdatePasswordAction::class,
+ *              "swagger_context"={
+ *                  "summary"="Reset a User password.",
+ *              },
+ *              "denormalization_context"={"groups"={"user:update-password"}}
+ *          },
  *     },
  *     itemOperations={"get"={"normalization_context"={"groups"="user:item:read"}}},
  *     paginationEnabled=false
@@ -43,7 +62,7 @@ class User implements UserInterface
      * @Assert\Email(
      *     message = "The email '{{ value }}' is not a valid email."
      * )
-     * @Groups({"user:read", "user:item:read", "user:write:post"})
+     * @Groups({"user:read", "user:item:read", "user:write:post", "user:forget-password"})
      */
     private $email;
 
@@ -78,12 +97,15 @@ class User implements UserInterface
      *     groups={"Registration", "Resetting", "Update"},
      *     message="Invalid password format",
      * )
+     * @Groups({"user:update-password"})
      */
     private $plainPassword;
 
     /**
      * @var string|null
      * @ORM\Column(type="string", length=255, nullable=true, unique=true)
+     *
+     * @Groups({"user:update-password"})
      */
     private $passwordRequestToken;
 
@@ -104,8 +126,6 @@ class User implements UserInterface
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $lastLoginAt;
-
-
 
     public function __construct()
     {

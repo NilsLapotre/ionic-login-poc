@@ -47,6 +47,11 @@ class ResettingPasswordController extends AbstractController
         $this->passwordRequestTokenTtl = $passwordRequestTokenTtl;
     }
 
+    public function forgotPassword(Request $request): Response
+    {
+        return new Response(json_encode($request->request));
+    }
+
     /**
      * @Route("/requestPassword", name="request_password")
      */
