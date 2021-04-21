@@ -1,0 +1,64 @@
+security:
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        # used to reload user from session & other features (e.g. switch_user)
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+
+    encoders:
+        App\Entity\User:
+            algorithm: auto
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+        refresh:
+            pattern:  ^/login/refresh_token
+            stateless: true
+            anonymous: true
+
+        main:
+            anonymous: true
+            lazy: true
+            provider: app_user_provider
+
+            json_login:
+                check_path: /login
+                username_path: email
+                password_path: password
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+
+    role_hierarchy:
+        # For role hierarchy to work,
+        # do not use: $hasAccess = in_array('ROLE_ADMIN', $user->getRoles());
+        # but use: $hasAccess = $this->isGranted('ROLE_ADMIN') /* or */ $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        # ROLE_LEARNER: # just a reminder, no hierarchy for LEARNER role
+        ROLE_TRAINER: [ROLE_LEARNER]
+        ROLE_MANAGER: [ROLE_TRAINER]
+        ROLE_ADMIN: [ROLE_MANAGER]
+        ROLE_SUPERADMIN: [ROLE_ADMIN]
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        - { path: ^/$, roles: IS_AUTHENTICATED_ANONYMOUSLY  }
+        - { path: ^/_, roles: IS_AUTHENTICATED_ANONYMOUSLY  }
+        - { path: ^/index\.[^.]+$, roles: IS_AUTHENTICATED_ANONYMOUSLY  }
+        - { path: ^/docs\.[^.]+$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/contexts/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/forget-password$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/users/[^/]+/reset-password$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/users/[^/]+/registration$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, roles: IS_AUTHENTICATED_FULLY }

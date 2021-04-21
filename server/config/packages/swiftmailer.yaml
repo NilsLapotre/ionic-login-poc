@@ -1,0 +1,6 @@
+swiftmailer:
+    transport: smtp
+    host: '%env(MAIL_HOST)%'
+    port: '%env(MAIL_PORT)%'
+    sender_address: '%env(MAIL_FROM)%'
+    spool: { type: 'memory' }

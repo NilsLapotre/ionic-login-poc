@@ -1,0 +1,20 @@
+# Required metadata
+sonar.projectKey=symfony-starter-kit
+sonar.projectName=symfony-starter-kit
+sonar.projectVersion=1.0
+
+# Comma-separated paths to directories with sources (required)
+sonar.sources=src
+sonar.exclusions=src/Migrations/*
+
+# Encoding of the source files
+sonar.sourceEncoding=UTF-8
+
+sonar.host.url=https://sonar.ecedi.net
+sonar.login=
+
+# Gitlab project
+sonar.gitlab.project_id=https://gitlab.ecedi.fr/simplonprod/devops/starter-kits/symfony-starter-kit.git
+sonar.scm.provider=git
+
+sonar.branch.name=${CI_COMMIT_REF_SLUG}

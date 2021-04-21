@@ -1,0 +1,39 @@
+easy_admin:
+  entities:
+    Admins:
+      label: Utilisateurs
+      class: App\Entity\User
+      list:
+        fields:
+          - { property: 'id', label: "ID" }
+          - { property: 'email', label: "Email", type: 'email' }
+          - { property: 'username', label: "Pseudonyme" }
+          - { property: 'nom', label: "Nom" }
+          - { property: 'prenom', label: "Prénom" }
+          - { property: 'lastLoginAt', label: "Dernière connexion", type: 'datetime' }
+          - { property: 'enabled', label: "Compte actif", type: 'toggle' }
+      edit:
+        fields:
+          - { type: 'section', label: "Informations générales" }
+          - { property: 'email', label: "Email", type: 'email' }
+          - { property: 'username', label: "Pseudonyme" }
+          - { property: 'nom', label: "Nom" }
+          - { property: 'prenom', label: "Prénom" }
+          - { type: 'section', label: "Sécurité" }
+          - { property: 'enabled', label: "Compte actif" }
+      new:
+        fields:
+          - { type: 'section', label: "Informations générales" }
+          - { property: 'email', label: "Email", type: 'email' }
+          - { property: 'username', label: "Pseudonyme" }
+          - { property: 'nom', label: "Nom" }
+          - { property: 'prenom', label: "Prénom" }
+          - { type: 'section', label: "Sécurité" }
+          - { property: 'plainPassword', type: 'password', type_options: { required: true }, label: "Mot de passe" }
+          - { property: 'enabled', label: "Compte actif" }
+      search:
+        fields:
+          - id
+          - email
+          - nom
+          - prenom

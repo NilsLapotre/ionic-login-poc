@@ -1,0 +1,24 @@
+api_platform:
+    title: 'ionic-login-poc'
+    show_webby: false
+
+    mapping:
+        paths: ['%kernel.project_dir%/src/Entity']
+
+    swagger:
+        # versions: keep v2 as default
+        # because v3 breaks example value auto-generation on facultative many2one relation with displayed properties
+        api_keys:
+            apiKey:
+                name: Authorization
+                type: header
+
+    collection:
+        pagination:
+            client_enabled: true
+            client_items_per_page: true # Disabled by default
+            items_per_page_parameter_name: perPage
+            maximum_items_per_page: 100
+
+    patch_formats:
+        json: ['application/merge-patch+json']

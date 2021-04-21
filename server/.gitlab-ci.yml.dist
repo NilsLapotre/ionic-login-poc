@@ -1,0 +1,104 @@
+default:
+  tags: ['smp-runner-docker']
+
+stages:
+    - build
+    - lint
+    - quality
+    - tests
+    - deploy
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+build_php:
+  stage: build
+  image: $CI_REGISTRY/simplonprod/devops/docker-images/php/7.4
+  script:
+    - composer config -g cache-dir "$(pwd)/.composer-cache"
+    - composer install
+  artifacts:
+    paths:
+      - vendor
+  allow_failure: false
+  cache:
+    paths:
+      - .composer-cache
+  only:
+    - master
+    - tags
+
+build_version:
+  stage: build
+  script:
+    - echo "$CI_COMMIT_TAG" > version.txt
+  artifacts:
+    paths:
+      - version.txt
+  only:
+    - master
+    - tags
+
+build_node:
+  stage: build
+  only:
+    - master
+    - tags
+  image: node:12
+  script:
+    - node -v > node_version
+    - npm install
+    # Adapt for prod afterwards : npm run production
+    - npm run build
+  cache:
+    paths:
+      - node_modules
+  artifacts:
+    expire_in: 24h
+    # define which directory to send to environments
+    paths:
+      - public/build
+  allow_failure: false
+
+deploy_development_ci:
+  stage: deploy
+  image: $CI_REGISTRY/simplonprod/devops/docker-images/ansible/simplonprod-deploy
+  script:
+    - ansible-playbook .deploy/base/deploy.yml -e target_environment="dev" -i .deploy/inventory_staging
+  environment:
+    name: dev
+  only:
+    - master
+
+deploy_development_tag:
+  stage: deploy
+  image: $CI_REGISTRY/simplonprod/devops/docker-images/ansible/simplonprod-deploy
+  script:
+    - ansible-playbook .deploy/base/deploy.yml -e target_environment="dev" -i .deploy/inventory_staging
+  environment:
+    name: dev
+  only:
+    - tags
+  when: manual
+
+deploy_staging:
+  stage: deploy
+  image: $CI_REGISTRY/simplonprod/devops/docker-images/ansible/simplonprod-deploy
+  script:
+    - ansible-playbook .deploy/base/deploy.yml -e target_environment="staging" -i .deploy/inventory_staging
+  environment:
+    name: staging
+  only:
+    - tags
+  when: manual
+
+#deploy_production:
+#  stage: deploy
+#  image: $CI_REGISTRY/simplonprod/devops/docker-images/ansible/simplonprod-deploy
+#  script:
+#    - ansible-playbook .deploy/base/deploy.yml -e target_environment="production" -i .deploy/inventory_production
+#  environment:
+#    name: production 
+#  only:
+#    - tags
+#  when: manual

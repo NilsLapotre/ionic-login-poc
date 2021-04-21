@@ -1,0 +1,21 @@
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index
+
+login:
+  path: /login
+  methods: ['POST']
+
+login_refresh_token:
+  path: /login/refresh_token
+  controller: gesdinet.jwtrefreshtoken::refresh
+
+forget-password:
+  path: /forget-password
+  controller: App\Controller\UserForgetPasswordController::sendRequest
+  methods:  ['POST']
+
+metadata:
+  path: /metadata
+  controller: App\Controller\MetadataController::getMetadata
+  methods:  ['get']

@@ -1,0 +1,32 @@
+doctrine:
+  dbal:
+    dbname:               '%env(resolve:BDD_NAME)%'
+    host:                 '%env(resolve:BDD_HOST)%'
+    port:                 '%env(resolve:BDD_PORT)%'
+    user:                 '%env(resolve:BDD_USERNAME)%'
+    password:             '%env(resolve:BDD_PASSWORD)%'
+    #        driver:               pdo_mysql
+    default_connection: default
+    #connections:
+    #default:
+    #    url: '%env(resolve:DATABASE_URL)%'
+    # IMPORTANT: You MUST configure your db driver and server version,
+    # either here or in the DATABASE_URL env var (see .env file)
+    #driver: 'mysql'
+    #server_version: '5.7'
+
+    # Only needed for MySQL (ignored otherwise)
+  #        charset: utf8mb4
+  #        default_table_options:
+  #            collate: utf8mb4_unicode_ci
+  orm:
+    auto_generate_proxy_classes: true
+    naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+    auto_mapping: true
+    mappings:
+      App:
+        is_bundle: false
+        type: annotation
+        dir: '%kernel.project_dir%/src/Entity'
+        prefix: 'App\Entity'
+        alias: App

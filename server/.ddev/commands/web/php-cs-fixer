@@ -1,0 +1,6 @@
+#!/bin/bash
+
+## Description: Run php-cs-fixer inside the web container
+## Usage: php-cs-fixer [flags] [args]
+
+vendor/bin/php-cs-fixer $@

@@ -1,0 +1,6 @@
+#!/bin/bash
+
+## Description: Run a NPM console command inside the web container
+## Usage: npm [flags] [args]
+
+npm  $@

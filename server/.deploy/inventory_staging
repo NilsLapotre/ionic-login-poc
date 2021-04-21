@@ -1,0 +1,1 @@
+staging.simplon.space ansible_user=simplonprod ansible_port=22

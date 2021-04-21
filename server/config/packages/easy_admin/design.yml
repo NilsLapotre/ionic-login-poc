@@ -1,0 +1,7 @@
+easy_admin:
+  design:
+    menu:
+      - { label: 'Gestion administrateurs', entity: 'Admins', icon: 'user' }
+    assets:
+      js:
+        - 'https://code.jquery.com/ui/1.12.0/jquery-ui.min.js'

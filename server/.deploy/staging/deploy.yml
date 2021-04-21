@@ -1,0 +1,66 @@
+---
+- hosts: staging.simplon.space
+
+  vars:
+    version: "{{ lookup('env', 'CI_COMMIT_SHA') }}"
+    ci_environment: "{{ lookup('env', 'CI_ENVIRONMENT_SLUG') }}"
+    git_repository_url: "{{ lookup('env', 'CI_REPOSITORY_URL') }}"
+    gitlab_project_name: "{{ lookup('env', 'CI_PROJECT_NAME') }}"
+    environment_stage: "{{ lookup('env', 'CI_COMMIT_REF_SLUG') }}"
+    git_branch: "{{ lookup('env', 'CI_COMMIT_REF_SLUG') }}"
+    server_name: "{{ gitlab_project_name + '.' + environment_stage + '.simplon.space' }}"
+
+  tasks:
+
+    - name: Update {{ gitlab_project_name }} {{ environment_stage }} branch
+      git:
+        accept_hostkey: yes
+        dest: /var/www/{{ environment_stage }}/{{ gitlab_project_name }}
+        repo: '{{ git_repository_url }}'
+        refspec: '+refs/heads/*:refs/remotes/origin/*'
+        version: '{{ version }}'
+        force: yes
+      notify:
+        - composer install
+        - console
+
+    - name: Create a new database with name '{{ gitlab_project_name }}-{{ environment_stage }}'
+      mysql_db:
+        login_user: simplonprod
+        login_password: simplonprod
+        name: "{{ gitlab_project_name }}-{{ environment_stage }}"
+        collation: utf8mb4_general_ci
+        encoding: utf8mb4
+        state: present
+
+    - name: Copy .env file
+      template:
+        src: env
+        dest: /var/www/{{ environment_stage }}/{{ gitlab_project_name }}/.env
+
+    - name: Setup nginx vhost
+      template:
+        src: nginx.conf
+        dest: /etc/nginx/sites-enabled/{{ server_name }}.conf
+      notify:
+        - reload nginx
+
+  handlers:
+
+    - name: composer install
+      command: php7.2 /usr/local/bin/composer install
+      args:
+        chdir: /var/www/{{ environment_stage }}/{{ gitlab_project_name }}
+
+    - name: console
+      command: '{{ item }}'
+      args:
+        chdir: /var/www/{{ environment_stage }}/{{ gitlab_project_name }}
+      with_items:
+        - 'php7.2 bin/console doctrine:migrations:migrate -n'
+        - 'php7.2 bin/console ckeditor:install --no-interaction'
+        - 'php7.2 bin/console assets:install'
+        - 'npm install'
+        - 'npm run build'
+    - name: reload nginx
+      command: sudo systemctl reload nginx

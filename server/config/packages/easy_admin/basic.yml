@@ -1,0 +1,10 @@
+easy_admin:
+  translation_domain: 'admin'
+  site_name: 'Starter Kit'
+  formats:
+    date:     'd/m/Y'
+    time:     'H:i'
+    datetime: 'd/m/Y H:i:s'
+  user:
+    display_name: true
+    display_avatar: false

@@ -1,0 +1,14 @@
+# variables available for all environments
+# the variables are used in ansible template file: *.j2
+# e.g env.j2, nginx.conf.j2
+php_version: php7.4
+project_name: symfony-starter-kit
+# Directories that will be kept between deploys
+shared:
+  - var/logs
+  - var/cache
+writable:
+  - var/logs
+  - var/cache
+db_user: "{{ lookup('env', 'DB_USER') }}"
+db_password: "{{ lookup('env', 'DB_PASSWORD') }}"

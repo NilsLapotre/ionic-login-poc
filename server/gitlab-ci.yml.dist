@@ -1,0 +1,28 @@
+stages:
+    - lint
+    - quality
+    - tests
+    - deploy
+
+variables:
+    GIT_SUBMODULE_STRATEGY: recursive
+
+deploy_development:
+    stage: deploy
+    script:
+        - ansible-playbook .deploy/development/deploy.yml -i .deploy/development/inventory
+    environment:
+        name: development
+        url: https://$CI_PROJECT_NAME.dev.simplon.space
+    only:
+        - dev
+
+deploy_staging:
+    stage: deploy
+    script:
+        - ansible-playbook .deploy/staging/deploy.yml -i .deploy/staging/inventory
+    environment:
+        name: staging
+        url: https://$CI_PROJECT_NAME.staging.simplon.space
+    only:
+        - staging
