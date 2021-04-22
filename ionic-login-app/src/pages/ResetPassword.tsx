@@ -1,12 +1,26 @@
 import { IonContent,IonRow, IonGrid, IonHeader, IonPage, IonTitle, IonToolbar, IonInput, IonItem, IonCol, IonLabel, IonAlert, IonButton } from '@ionic/react';
 import React, { useState } from 'react';
+import { RouteComponentProps } from 'react-router';
+import { useHistory } from "react-router-dom";
+import { UpdatePassword } from '../services/passwordService'
 
 
-const ResetPassword: React.FC = () => {
+interface ResetPasswordProps extends RouteComponentProps<{
+    token: string;
+  }> {}
+
+const ResetPassword: React.FC<ResetPasswordProps> = ({match})  => {
   const [password, setPassword] = useState<string>();
   const [confirmPassword, setConfirmPassword] = useState<string>();
   const [iserror, setIserror] = useState<boolean>(false);
+  const [isopen, setIsopen] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
+  const history = useHistory();
+
+    const goToLogin= () => {
+        setIsopen(false);
+        history.push("/login");
+    }
  
  
   const handleSubmit = () => {
@@ -20,9 +34,17 @@ const ResetPassword: React.FC = () => {
         setIserror(true);
         return;
     }
-
+    const token = match.params.token;
    //Appel vers service
-  };
+   UpdatePassword(token, password)
+    .then(res => {
+        setIsopen(true);
+    })
+    .catch(error => {
+        setMessage(error);
+        setIserror(true);
+    })
+};
 
 
   return (
@@ -43,6 +65,13 @@ const ResetPassword: React.FC = () => {
               header={"Error!"}
               message={message}
               buttons={["Dismiss"]}
+          />
+          <IonAlert
+          isOpen={isopen}
+          onDidDismiss={() => goToLogin()}
+          header={"Success!"}
+          message={"Password was succesfully updated"}
+          buttons={["Login"]}
           />
         </IonCol>
       </IonRow>

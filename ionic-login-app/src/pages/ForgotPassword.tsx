@@ -1,10 +1,11 @@
 import { IonContent,IonRow, IonGrid, IonHeader, IonPage, IonTitle, IonToolbar, IonInput, IonItem, IonCol, IonLabel, IonAlert, IonButton } from '@ionic/react';
 import React, { useState } from 'react';
-
+import { RequestPassword } from '../services/passwordService'
 
 const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState<string>();
   const [iserror, setIserror] = useState<boolean>(false);
+  const [isopen, setIsopen] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
  
   const validateEmail = () => {
@@ -28,7 +29,15 @@ const ForgotPassword: React.FC = () => {
     }
 
    //Appel vers service
-  };
+    RequestPassword(email)
+        .then(res => {
+            setIsopen(true);
+        })
+        .catch(error => {
+            setMessage(error);
+            setIserror(true);
+        })
+    };
 
 
   return (
@@ -49,6 +58,13 @@ const ForgotPassword: React.FC = () => {
               header={"Error!"}
               message={message}
               buttons={["Dismiss"]}
+          /> 
+          <IonAlert
+          isOpen={isopen}
+          onDidDismiss={() => setIsopen(false)}
+          header={"Success!"}
+          message={"An email was send to this address"}
+          buttons={["Ok"]}
           />
         </IonCol>
       </IonRow>

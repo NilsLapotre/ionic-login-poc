@@ -77,7 +77,7 @@ const Login: React.FC = () => {
               onDidDismiss={() => setIsopen(false)}
               header={"Success!"}
               message={"Login successful"}
-              buttons={["Cool!"]}
+              buttons={["Ok"]}
           />
         </IonCol>
       </IonRow>

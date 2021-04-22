@@ -24,7 +24,7 @@ use App\Controller\UserUpdatePasswordAction;
  *      },
  *      "post_forget_password"={
  *              "method"="POST",
- *              "path"="/users/forget-password",
+ *              "path"="/forget-password",
  *              "controller"=UserForgetPasswordAction::class,
  *              "swagger_context"={
  *                  "summary"="Reset a User password.",
@@ -33,7 +33,7 @@ use App\Controller\UserUpdatePasswordAction;
  *          },
  *     "post_update_password"={
  *              "method"="POST",
- *              "path"="/users/update-password",
+ *              "path"="/update-password",
  *              "controller"=UserUpdatePasswordAction::class,
  *              "swagger_context"={
  *                  "summary"="Reset a User password.",
