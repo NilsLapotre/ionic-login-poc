@@ -23,6 +23,7 @@ class UserUpdatePasswordAction extends AbstractController
 
     public function __invoke(User $data, UserPasswordEncoderInterface $userPasswordEncoder): Response
     {
+        $response = new Response();
         if (null !== $data->getPasswordRequestToken() && null !== $data->getPlainPassword()) {
             $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['passwordRequestToken' => $data->getPasswordRequestToken()]);
             if ($user) {
@@ -32,12 +33,12 @@ class UserUpdatePasswordAction extends AbstractController
                 ));
                 $user->setPasswordRequestToken(null);
                 $this->entityManager->flush();
-                return new Response('success');
+                return new Response();
             }
-
-            return new Response('non vide');
+            $response->setStatusCode(Response::HTTP_UNAUTHORIZED);
+            return $response;
         }
-
-        return new Response('vide');
+        $response->setStatusCode(Response::HTTP_BAD_REQUEST);
+        return $response;
     }
 }
