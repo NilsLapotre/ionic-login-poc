@@ -55,7 +55,7 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({match})  => {
       </IonToolbar>
     </IonHeader>
     <IonContent fullscreen className="ion-padding ion-text-center">
-      <IonGrid>
+      <IonGrid >
       <IonRow>
         <IonCol>
           <IonAlert
@@ -75,13 +75,13 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({match})  => {
           />
         </IonCol>
       </IonRow>
-      <IonRow>
-          <IonCol>
+      <IonRow className="ion-justify-content-center">
+          <IonCol size-lg="4" size-sm="10">
             <IonLabel position="floating"> Please enter your new password </IonLabel>    
           </IonCol>
         </IonRow>
-        <IonRow>
-          <IonCol>
+        <IonRow className="ion-justify-content-center">
+          <IonCol size-lg="4" size-sm="10">
           <IonItem>
           <IonLabel position="floating"> Password </IonLabel>
           <IonInput
@@ -93,8 +93,8 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({match})  => {
           </IonItem>
           </IonCol>
         </IonRow>
-        <IonRow>
-          <IonCol>
+        <IonRow className="ion-justify-content-center">
+          <IonCol size-lg="4" size-sm="10">
           <IonItem>
           <IonLabel position="floating"> Confirm password</IonLabel>
           <IonInput
@@ -106,8 +106,8 @@ const ResetPassword: React.FC<ResetPasswordProps> = ({match})  => {
           </IonItem>
           </IonCol>
         </IonRow>
-        <IonRow>
-          <IonCol>
+        <IonRow className="ion-justify-content-center">
+          <IonCol size-lg="4" size-sm="10">
             <IonButton expand="block" onClick={handleSubmit}>Envoyer</IonButton>
            </IonCol>
         </IonRow>

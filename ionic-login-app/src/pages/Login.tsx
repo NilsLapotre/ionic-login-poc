@@ -2,6 +2,7 @@ import { IonContent,IonRow, IonGrid, IonHeader, IonPage, IonTitle, IonToolbar, I
 import React, { useState } from 'react';
 import './Login.css';
 import { login } from '../services/loginService';
+import { useHistory } from "react-router-dom";
 
 
 const Login: React.FC = () => {
@@ -10,6 +11,7 @@ const Login: React.FC = () => {
   const [isopen, setIsopen] = useState<boolean>(false);
   const [message, setMessage] = useState<string>("");
   const [password, setPassword] = useState<string>();
+  const history = useHistory();
 
   const validateEmail = () => {
     var regexp = new RegExp('.+\@.+\..+');
@@ -17,6 +19,10 @@ const Login: React.FC = () => {
       return true;
     }
     return false;
+  }
+
+  const goToAccount = () => {
+    history.push("/account");
   }
 
   const handleLogin = () => {
@@ -45,8 +51,10 @@ const Login: React.FC = () => {
     login(loginData)
       .then(res => {             
         setIsopen(true);
+        
       })
       .catch(error=>{
+        console.log(error);
         setMessage(error);
         setIserror(true);
       });
@@ -74,15 +82,15 @@ const Login: React.FC = () => {
           />
           <IonAlert
               isOpen={isopen}
-              onDidDismiss={() => setIsopen(false)}
+              onDidDismiss={() => goToAccount()}
               header={"Success!"}
               message={"Login successful"}
               buttons={["Ok"]}
           />
         </IonCol>
       </IonRow>
-        <IonRow>
-          <IonCol>
+        <IonRow className="ion-justify-content-center">
+          <IonCol size-lg="4" size-xs="12">
           <IonItem>
           <IonLabel position="floating"> Email</IonLabel>
           <IonInput
@@ -95,8 +103,8 @@ const Login: React.FC = () => {
           </IonCol>
         </IonRow>
 
-        <IonRow>
-          <IonCol>
+        <IonRow className="ion-justify-content-center">
+          <IonCol size-lg="4" size-xs="12">
           <IonItem>
             <IonLabel position="floating"> Password</IonLabel>
             <IonInput
@@ -108,8 +116,8 @@ const Login: React.FC = () => {
           </IonItem>
           </IonCol>
         </IonRow>
-        <IonRow>
-          <IonCol>
+        <IonRow className="ion-justify-content-center">
+          <IonCol size-lg="4" size-xs="12">
             <IonButton expand="block" onClick={handleLogin}
             >Login</IonButton>
             <p style={{ fontSize: "medium" }}>

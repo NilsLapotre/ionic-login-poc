@@ -48,7 +48,7 @@ const ForgotPassword: React.FC = () => {
       </IonToolbar>
     </IonHeader>
     <IonContent fullscreen className="ion-padding ion-text-center">
-      <IonGrid>
+      <IonGrid >
       <IonRow>
         <IonCol>
           <IonAlert
@@ -68,13 +68,13 @@ const ForgotPassword: React.FC = () => {
           />
         </IonCol>
       </IonRow>
-      <IonRow>
-          <IonCol>
+      <IonRow className="ion-justify-content-center">
+          <IonCol size-lg="4" size-sm="10" className="ion-align-self-center">
             <IonLabel position="floating"> Enter your email to reset your password</IonLabel>    
           </IonCol>
         </IonRow>
-        <IonRow>
-          <IonCol>
+        <IonRow className="ion-justify-content-center">
+          <IonCol size-lg="4" size-sm="10" className="ion-align-self-center">
           <IonItem>
           <IonLabel position="floating"> Email</IonLabel>
           <IonInput
@@ -86,8 +86,8 @@ const ForgotPassword: React.FC = () => {
           </IonItem>
           </IonCol>
         </IonRow>
-        <IonRow>
-          <IonCol>
+        <IonRow className="ion-justify-content-center">
+          <IonCol size-lg="4" size-sm="10" className="ion-align-self-center">
             <IonButton expand="block" onClick={handleSubmit}>Envoyer</IonButton>
            </IonCol>
         </IonRow>
